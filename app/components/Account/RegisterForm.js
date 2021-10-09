@@ -1,17 +1,41 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
+import { validateEmail } from "../../utils/validations"
+import { size, isEmpty } from "lodash";
 
 export default function RegisterForm() {
     
     const [showPassword, setShowPassword] = useState(false);
     const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+    const [formData, setFormData] = useState(defaultFormValue())
+    
+    const onSubmit = () => {
+
+        if(isEmpty(formData.email) || isEmpty(formData.password) || isEmpty(formData.repeatPassword)){
+            
+        } else if(!validateEmail(formData.email)){
+                
+        } else if(formData.password !== formData.repeatPassword){
+            
+        } else if(size(formData.password) < 6) {
+            
+        } else {
+            
+        }
+        
+    }
+    
+    const onChange = (e, type) => {        
+        setFormData({...formData, [type]: e.nativeEvent.text})
+    }
     
     return (
         <View style={styles.formContainer}>
             <Input 
                 placeholder="Correo electrónico"
                 containerStyle={styles.inputForm}
+                onChange={(e) => onChange(e, "email")}
                 rightIcon={
                     <Icon 
                         type="material-community"
@@ -24,6 +48,7 @@ export default function RegisterForm() {
                 placeholder="Contraseña"
                 containerStyle={styles.inputForm}
                 password={true}
+                onChange={(e) => onChange(e, "password")}
                 secureTextEntry={showPassword ? false : true}
                 rightIcon={
                     <Icon 
@@ -39,6 +64,7 @@ export default function RegisterForm() {
                 placeholder="Repetir contraseña"
                 containerStyle={styles.inputForm}
                 password={true}
+                onChange={(e) => onChange(e, "repeatPassword")}
                 secureTextEntry={showRepeatPassword ? false : true}
                 rightIcon={
                     <Icon 
@@ -53,9 +79,18 @@ export default function RegisterForm() {
                 title="Unirse"
                 containerStyle={styles.btnContainerRegister}
                 buttonStyle={styles.btnRegister}
+                onPress={onSubmit}
             />
         </View>
     )
+}
+
+function defaultFormValue() {
+    return {
+        email: "",
+        password: "",
+        repeatPassword: ""
+    }
 }
 
 const styles = StyleSheet.create({
